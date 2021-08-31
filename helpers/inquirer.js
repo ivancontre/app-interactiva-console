@@ -64,6 +64,7 @@ const pause = async () => {
 };
 
 const readInput = async (message) => {
+
     const questions = [
         {
             type: 'input',
@@ -91,6 +92,11 @@ const deleteTaskMenu = async (tasks = []) => {
             value: task.id,
             name: `${((index + 1) + '.').green} ${task.description}`
         }
+    });
+
+    choices.unshift({
+        value: '0',
+        name: '0.'.green + ' Cancelar'
     });
 
     const questions = [
@@ -124,10 +130,36 @@ const confirm = async (message) => {
 
 };
 
+const showChecklist = async (tasks = []) => {
+
+    const choices = tasks.map((task, index) => {
+        return {
+            value: task.id,
+            name: `${((index + 1) + '.').green} ${task.description}`,
+            checked: task.completeOn ? true : false
+        }
+    });
+
+    const questions = [
+        {
+            type: 'checkbox',
+            name: 'ids',
+            message: 'Seleccione',
+            choices
+        }
+    ];
+    
+    const { ids } = await inquirer.prompt(questions);
+
+    return ids;
+
+};
+
 module.exports = {
     inquirerMenu,
     pause,
     readInput,
     deleteTaskMenu,
-    confirm
+    confirm,
+    showChecklist
 };

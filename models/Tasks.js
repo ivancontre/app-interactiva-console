@@ -57,6 +57,26 @@ class Tasks {
         });
     };
 
+    toggleCompleted(ids = []) {
+
+        ids.forEach(id => {
+
+            const task = this._list[id];
+
+            if (!task.completeOn) {
+                task.completeOn = new Date().toISOString();
+            }
+        });
+
+        this.list.forEach(task => {
+            if (!ids.includes(task.id)) {
+                const t = this._list[task.id];
+                t.completeOn = null;
+
+            }
+        })
+    }
+
     get list() {
         const output = [];
 

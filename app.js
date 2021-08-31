@@ -1,7 +1,6 @@
-const { inquirerMenu, pause, readInput, deleteTaskMenu, confirm } = require('./helpers/inquirer');
+const { inquirerMenu, pause, readInput, deleteTaskMenu, confirm, showChecklist } = require('./helpers/inquirer');
 const { saveFile, readFile } = require('./helpers/controllerDB');
 const Task = require('./models/Task');
-//const { showMenu, pause } = require('./helpers/messages');
 const Tasks = require('./models/Tasks');
 
 
@@ -40,18 +39,24 @@ const main = async () => {
                 tasks.listCompletedPending(false);
                 break;
 
+            case '5':
+                const ids = await showChecklist(tasks.list);
+                tasks.toggleCompleted(ids);
+                break;
+
             case '6':
                 const id = await deleteTaskMenu(tasks.list);
                 console.log({id});
 
-                //TODO: Preguntar si está seguro
-                const ok = await confirm('¿Seguro que desea eliminar esta tarea?');
-                console.log({ok})
+                if (id !== '0') {
 
-                if (ok) {
-                    tasks.deleteTask(id);
-                    console.log('Tarea borrada correctamente');
-                }
+                    const ok = await confirm('¿Seguro que desea eliminar esta tarea?');
+
+                    if (ok) {
+                        tasks.deleteTask(id);
+                        console.log('Tarea borrada correctamente');
+                    }
+                }                
 
                 break;
         };
